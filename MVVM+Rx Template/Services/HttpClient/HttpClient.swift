@@ -53,6 +53,7 @@ class HttpClient: IHttpClient {
             
             URLSession.shared.rx.response(request: request)
                 .debug()
+                .map({ $0.data })
                 .map(T.self)
                 .bind(to: result)
                 .disposed(by: bag)
@@ -65,7 +66,7 @@ class HttpClient: IHttpClient {
     private func requestBuilder(method: HTTPMethod, url: URL) -> URLRequest {
         var request = URLRequest(url: url)
         // Fill headers
-        request.allHTTPHeaderFields = ["Content-Type": content, "Accept": "application/json"]
+        request.allHTTPHeaderFields = ["Content-Type": "application/json", "Accept": "application/json"]
         request.httpMethod = method.rawValue
         return request
     }
